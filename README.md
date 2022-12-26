@@ -1,6 +1,4 @@
-# designing-apis-openapi
-
-## Book
+### Book
 - Designing APIs with Swagger and OpenAPI
 
 ### What for
