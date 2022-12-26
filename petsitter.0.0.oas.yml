@@ -74,6 +74,44 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Job'
+  /users/{id}/job-applications:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: List Applications For User
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/JobApplication'
+              examples:
+                two-items:
+                  summary: Two Job Applications
+                  value:
+                    items:
+                      - id: 123
+                        user_id: 123
+                        job_id: 123
+                        status: PENDING
+                      - id: 123
+                        user_id: 123
+                        job_id: 123
+                        status: COMPLETE                        
+                empty:
+                  summary: Zero Job Application
+                  value:
+                    items: []
   /jobs:
     post:
       summary: Create Job
