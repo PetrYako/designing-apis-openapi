@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PetSitter API
-  version: 1.0.0
+  version: 0.0
 paths:
   /users:
     post:
@@ -132,7 +132,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Job'  
+                $ref: '#/components/schemas/Job'
+    delete:
+      summary: Delete job
+      responses:
+        204:
+          description: No Content  
   /jobs/{id}/job-applications:
     parameters:
       - schema:
