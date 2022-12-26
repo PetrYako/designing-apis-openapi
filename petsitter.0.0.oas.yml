@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: PetSitter API
-  version: "0.2"
+  version: "0.1"
 servers:
 - url: /
 tags:
@@ -408,8 +408,10 @@ components:
           type: string
         activity:
           type: string
-        dog:
-          $ref: '#/components/schemas/Dog'
+        pets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pet'
       example:
         creator_user_id: 6
         start_time: start_time
@@ -421,22 +423,6 @@ components:
           name: name
           age: 1
           breed: breed
-    Dog:
-      type: object
-      properties:
-        name:
-          type: string
-        age:
-          type: integer
-        breed:
-          type: string
-        size:
-          type: string
-      example:
-        size: size
-        name: name
-        age: 1
-        breed: breed
     JobApplication:
       type: object
       properties:
@@ -453,6 +439,42 @@ components:
         job_id: 1
         id: 0
         status: status
+    Pet:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+            age:
+              type: integer
+        - oneOf:
+          - $ref: '#/components/schemas/Cat'
+          - $ref: '#/components/schemas/Dog'
+          discriminator:
+            propertyName: species
+            mapping:
+              Cat: '#/components/schemas/Cat'
+              Dog: '#/components/schemas/Dog'
+    Dog:
+      type: object
+      properties:
+        species:
+          type: string
+        breed:
+          type: string
+        size:
+          type: string
+      required:
+        - species
+    Cat:
+      type: object
+      properties:
+        species:
+          type: string
+        breed:
+          type: string
+      required:
+        - species
     Session:
       type: object
       properties:
