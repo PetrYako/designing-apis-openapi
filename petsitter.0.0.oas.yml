@@ -288,6 +288,24 @@ paths:
               explode: false
               schema:
                 type: string
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OASError'
+        401:
+          description: Unathorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OASError'
+        403:
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /jobs/{id}:
     get:
       tags:
@@ -561,6 +579,46 @@ components:
           type: string
         auth_header:
           type: string
+    OASError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+                description: |
+                  For input validation errorrs, identifies where
+                  in the JSON request body the error occurred.
+              message:
+                type: string
+                description: Human-readable error message.
+              errorCode:
+                type: string
+                description: Code indicating error type.
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          description: URI indicating error type.
+        title:
+          type: string
+          description: Human-readable error title.
+        status:
+          type: integer
+          description: HTTP status code.
+        detail:
+          type: string
+          description: Human-readable error details
+        instance:
+          type: string
+          description: URI indicating error instance.
   securitySchemes: 
     SessionToken:
       type: apiKey
