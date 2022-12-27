@@ -156,15 +156,94 @@ paths:
     get:
       tags:
         - Jobs
-      summary: List All Jobs
-      operationId: listAllJobs
+      summary: List/Search Available Jobs
+      operationId: listOrSearchAvailableJobs
+      parameters:
+        - name: sort
+          in: query
+          description: |
+            Indicate the sorting key and direction for the results.
+            Use the field name, suffixed with ":asc" for ascending or ":desc" for descending order.
+            Valid fileds: start_time, end_time, activitiy
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of results to return.
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: cursor
+          in: query
+          description: |
+            Use the cursor from the response to access more results.
+          schema:
+            type: string
+        - name: start_time_before
+          in: query
+          description: Search jobs starting before this date and time
+          schema:
+            type: string
+            format: date-time
+        - name: start_time_after
+          in: query
+          description: Search jobs starting after this date and time
+          schema:
+            type: string
+            format: date-time
+        - name: end_time_before
+          in: query
+          description: Search jobs ending before this date and time
+          schema:
+            type: string
+            format: date-time
+        - name: end_time_after
+          in: query
+          description: Search jobs ending after this date and time
+          schema:
+            type: string
+            format: date-time
+        - name: activity
+          in: query
+          description: |
+            Performs a full-text search for the phrase entered in job activities.
+          schema:
+            type: string
+        - name: pets
+          in: query
+          description: Searches for pets matching specific criteria.
+          style: deepObject
+          schema:
+            type: object
+            properties:
+              age_below:
+                type: integer
+                description: Return only pets with this age or younger.
+              age_above:
+                type: integer
+                description: Return only pets with this age or older.
+              species:
+                type: string
+                description: |
+                  Return only pets with this species.
+                  Provide multiple species as comma-separated values.
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Job'
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Job'
+                  cursor:
+                    type: string
+                    description: Cursor for the next result page.
+                    nullable: true
               examples:
                 with-some-data:
                   summary: With some data
